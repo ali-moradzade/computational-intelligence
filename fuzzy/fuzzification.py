@@ -62,7 +62,8 @@ bloodPressure_location = {
 }
 
 bloodSugar_location = {
-    'bloodSugar_veryhigh': (105, 120, math.inf)
+    'bloodSugar_veryhigh': (105, 120, math.inf),
+    'bloodSugar_not_veryhigh': (-math.inf, 105, 120)
 }
 
 cholesterol_location = {
@@ -119,22 +120,22 @@ def fuzzify(input_value_dict):
     if chest_pain == 1:
         fuzzy_values_dict['typical_angina'] = 1
         fuzzy_values_dict['atypical_angina'] = 0
-        fuzzy_values_dict['non-anginal_pain'] = 0
+        fuzzy_values_dict['non_anginal_pain'] = 0
         fuzzy_values_dict['asymptomatic'] = 0
     elif chest_pain == 2:
         fuzzy_values_dict['typical_angina'] = 0
         fuzzy_values_dict['atypical_angina'] = 1
-        fuzzy_values_dict['non-anginal_pain'] = 0
+        fuzzy_values_dict['non_anginal_pain'] = 0
         fuzzy_values_dict['asymptomatic'] = 0
     elif chest_pain == 3:
         fuzzy_values_dict['typical_angina'] = 0
         fuzzy_values_dict['atypical_angina'] = 0
-        fuzzy_values_dict['non-anginal_pain'] = 1
+        fuzzy_values_dict['non_anginal_pain'] = 1
         fuzzy_values_dict['asymptomatic'] = 0
     else:
         fuzzy_values_dict['typical_angina'] = 0
         fuzzy_values_dict['atypical_angina'] = 0
-        fuzzy_values_dict['non-anginal_pain'] = 0
+        fuzzy_values_dict['non_anginal_pain'] = 0
         fuzzy_values_dict['asymptomatic'] = 1
 
     if sex == 0:
