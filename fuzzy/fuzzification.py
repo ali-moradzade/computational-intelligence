@@ -95,6 +95,7 @@ def fuzzify(input_value_dict):
     bloodSugar = input_value_dict.get('bloodSugar')
     cholesterol = input_value_dict.get('cholesterol')
     heartRate = input_value_dict.get('heartRate')
+    chest_pain = input_value_dict.get('chest_pain')
     sex = input_value_dict.get('sex')
 
     fuzzy_values_dict = {}
@@ -113,6 +114,28 @@ def fuzzify(input_value_dict):
 
     for k, structure in heartRate_location.items():
         fuzzy_values_dict[k] = membership(structure, heartRate)
+
+    # Converting our crisp values to fuzzy values
+    if chest_pain == 1:
+        fuzzy_values_dict['typical_angina'] = 1
+        fuzzy_values_dict['atypical_angina'] = 0
+        fuzzy_values_dict['non-anginal_pain'] = 0
+        fuzzy_values_dict['asymptomatic'] = 0
+    elif chest_pain == 2:
+        fuzzy_values_dict['typical_angina'] = 0
+        fuzzy_values_dict['atypical_angina'] = 1
+        fuzzy_values_dict['non-anginal_pain'] = 0
+        fuzzy_values_dict['asymptomatic'] = 0
+    elif chest_pain == 3:
+        fuzzy_values_dict['typical_angina'] = 0
+        fuzzy_values_dict['atypical_angina'] = 0
+        fuzzy_values_dict['non-anginal_pain'] = 1
+        fuzzy_values_dict['asymptomatic'] = 0
+    else:
+        fuzzy_values_dict['typical_angina'] = 0
+        fuzzy_values_dict['atypical_angina'] = 0
+        fuzzy_values_dict['non-anginal_pain'] = 0
+        fuzzy_values_dict['asymptomatic'] = 1
 
     if sex == 0:
         fuzzy_values_dict['male'] = 1
