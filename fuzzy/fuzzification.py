@@ -6,43 +6,40 @@ def calculate_Y(p1, p2, x):
     return ((p1[1] - p2[1]) / (p1[0] - p2[0])) * (x - p1[0]) + p1[1]
 
 
-def membership(structure, point):
-    p1 = structure[0]
-    p2 = structure[1]
-    p3 = structure[2]
-
-    x = point[0]
-    y = point[1]
+def membership(structure, x):
+    x1 = structure[0]
+    x2 = structure[1]
+    x3 = structure[2]
 
     # ---\
     #     \
-    if math.isinf(p1[0])
-        if x <= p2[0]:
+    if math.isinf(x1)
+        if x <= x2:
             return 1
-        elif x <= p3[0]:
-            return calculate_Y(p2, p3, x)
+        elif x <= x3:
+            return calculate_Y(x2, x3, x)
         else:
             return 0
 
     #  /---
     # /
-    elif math.isinf(p3[0]):
-        if x <= p1[0]:
+    elif math.isinf(x3):
+        if x <= x1:
             return 0
-        elif x <= p2[0]:
-            return calculate_Y(p1, p2, x)
+        elif x <= x2:
+            return calculate_Y(x1, x2, x)
         else:
             return 1
 
     #  /\
     # /  \
     else:
-        if x <= p1[0]:
+        if x <= x1:
             return 0
-        elif x <= p2[0]:
-            return calculate_Y(p1, p2, x)
-        elif x <= p3[0]:
-            return calculate_Y(p2, p3, x)
+        elif x <= x2:
+            return calculate_Y(x1, x2, x)
+        elif x <= x3:
+            return calculate_Y(x2, x3, x)
         else:
             return 0
 
