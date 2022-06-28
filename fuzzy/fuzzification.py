@@ -78,6 +78,14 @@ heartRate_location = {
     'heartRate_high': (152, 210, math.inf)
 }
 
+output_sick_location = {
+    'output_sick1': (-math.inf, 0.25, 1),
+    'output_sick2': (0, 1, 2),
+    'output_sick3': (1, 2, 3),
+    'output_sick4': (2, 3, 4),
+    'output_healthy': (3, 3.75, math.inf)
+}
+
 system = Reader().load_from_file('rules.fcl')
 
 
