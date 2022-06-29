@@ -4,7 +4,7 @@ from fuzzification import membership
 import numpy as np
 
 
-def calculate_point_value(x, fuzzy_output_values)
+def calculate_point_value(x, fuzzy_output_values):
     value = 0
     for k, structure in output_sick_location.items():
         x0 = structure[0]
@@ -40,7 +40,7 @@ def defuzzifier(fuzzy_output_values):
     step = 0.1
 
     for x in np.arange(-1, 5, step):
-        fx = calculate_point_value(x, output_sick_location, fuzzy_output_values)
+        fx = calculate_point_value(x, fuzzy_output_values)
         point_values_dict[x] = fx
 
     return calculate_center_of_gravity(point_values_dict, step)
