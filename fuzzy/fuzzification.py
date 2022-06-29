@@ -1,5 +1,4 @@
 import math
-from fuzzy.storage.fcl.Reader import Reader
 
 
 def calculate_Y(p1, p2, x):
@@ -13,11 +12,11 @@ def membership(structure, x):
 
     # ---\
     #     \
-    if math.isinf(x1)
+    if math.isinf(x1):
         if x <= x2:
             return 1
         elif x <= x3:
-            return calculate_Y(x2, x3, x)
+            return calculate_Y((x2, 1), (x3, 0), x)
         else:
             return 0
 
@@ -27,7 +26,7 @@ def membership(structure, x):
         if x <= x1:
             return 0
         elif x <= x2:
-            return calculate_Y(x1, x2, x)
+            return calculate_Y((x1, 0), (x2, 1), x)
         else:
             return 1
 
@@ -37,9 +36,9 @@ def membership(structure, x):
         if x <= x1:
             return 0
         elif x <= x2:
-            return calculate_Y(x1, x2, x)
+            return calculate_Y((x1, 0), (x2, 1), x)
         elif x <= x3:
-            return calculate_Y(x2, x3, x)
+            return calculate_Y((x2, 1), (x3, 0), x)
         else:
             return 0
 
@@ -84,15 +83,13 @@ output_sick_location = {
     'output_healthy': (3, 3.75, math.inf)
 }
 
-system = Reader().load_from_file('rules.fcl')
-
 
 def fuzzify(input_value_dict):
     age = input_value_dict.get('age')
-    bloodPressure = input_value_dict.get('bloodPressure')
-    bloodSugar = input_value_dict.get('bloodSugar')
-    cholesterol = input_value_dict.get('cholesterol')
-    heartRate = input_value_dict.get('heartRate')
+    bloodPressure = input_value_dict.get('blood_pressure')
+    bloodSugar = input_value_dict.get('blood_sugar')
+    cholesterol = input_value_dict.get('cholestrol')
+    heartRate = input_value_dict.get('heart_rate')
     chest_pain = input_value_dict.get('chest_pain')
     sex = input_value_dict.get('sex')
 
