@@ -12,7 +12,6 @@ def main_page():
 @app.route('/result', methods=['GET', 'POST'])
 def final_result():
     input_dict = request.form.to_dict()
-    print(input_dict)
     provide_result = ProvideResult()
     output = provide_result.get_final_result(input_dict=input_dict)
     return render_template('result.html', output=output)
