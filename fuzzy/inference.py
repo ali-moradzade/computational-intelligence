@@ -10,7 +10,7 @@ def inference(fuzzy_values_dict):
         if rule[1] == 'nothing':
             item2 = 1
         else:
-            item2 = fuzzy_output_values[rule[1]]
+            item2 = fuzzy_values_dict[rule[1]]
 
         output = rule[2]
 
@@ -21,4 +21,4 @@ def inference(fuzzy_values_dict):
             if fuzzy_output_values[output] < min(item1, item2):
                 fuzzy_output_values[output] = min(item1, item2)
 
-        return fuzzy_output_values
+    return fuzzy_output_values
