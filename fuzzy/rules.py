@@ -25,9 +25,9 @@ rules_list = [
     # Rule 10
     ('bloodPressure_high', 'heartRate_low', 'output_sick1'),
     # Rule 11
-    ('typical_anginal', 'nothing', 'output_healthy'),
+    ('typical_angina', 'nothing', 'output_healthy'),
     # Rule 12
-    ('atypical_anginal', 'nothing', 'output_sick1'),
+    ('atypical_angina', 'nothing', 'output_sick1'),
     # Rule 13
     ('non_anginal_pain', 'nothing', 'output_sick2'),
     # Rule 14
