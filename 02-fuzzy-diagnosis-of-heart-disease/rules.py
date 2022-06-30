@@ -87,7 +87,6 @@ rules_list = [
     # Rule 38
     ('heartRate_high', 'nothing', 'output_sick4'),
 
-
     # Rule 39
     ('exercise_suitable', 'nothing', 'output_sick2'),
 
