@@ -75,6 +75,18 @@ heartRate_location = {
     'heartRate_high': (152, 210, math.inf)
 }
 
+ecg_location = {
+    'ecg_normal': (-math.inf, 0, 0.4),
+    'ecg_abnormal': (0.2, 1, 1.8),
+    'ecg_hypertrophy': (1.4, 1.9, math.inf)
+}
+
+oldPeak_location = {
+    'oldPeak_low': (-math.inf, 1, 2),
+    'oldPeak_risk': (1.5, 2.8, 4.2),
+    'oldPeak_terrible': (2.5, 4, math.inf)
+}
+
 output_sick_location = {
     'output_sick1': (-math.inf, 0.25, 1),
     'output_sick2': (0, 1, 2),
@@ -90,8 +102,12 @@ def fuzzify(input_value_dict):
     bloodSugar = input_value_dict.get('blood_sugar')
     cholesterol = input_value_dict.get('cholestrol')
     heartRate = input_value_dict.get('heart_rate')
+    ecg = input_value_dict.get('ecg')
+    oldPeak = input_value_dict.get('old_peak')
     chest_pain = input_value_dict.get('chest_pain')
     sex = input_value_dict.get('sex')
+    thallium = input_value_dict.get('thallium_scan')
+    exercise = input_value_dict.get('exercise')
 
     fuzzy_values_dict = {}
 
@@ -109,6 +125,12 @@ def fuzzify(input_value_dict):
 
     for k, structure in heartRate_location.items():
         fuzzy_values_dict[k] = membership(structure, heartRate)
+
+    for k, structure in ecg_location.items():
+        fuzzy_values_dict[k] = membership(structure, ecg)
+
+    for k, structure in oldPeak_location.items():
+        fuzzy_values_dict[k] = membership(structure, oldPeak)
 
     # Converting our crisp values to fuzzy values
     if chest_pain == 1:
@@ -138,5 +160,25 @@ def fuzzify(input_value_dict):
     else:
         fuzzy_values_dict['male'] = 0
         fuzzy_values_dict['female'] = 1
+
+    if exercise == 0:
+        fuzzy_values_dict['exercise_unsuitable'] = 1
+        fuzzy_values_dict['exercise_suitable'] = 0
+    else:
+        fuzzy_values_dict['exercise_unsuitable'] = 0
+        fuzzy_values_dict['exercise_suitable'] = 1
+
+    if thallium == 3:
+        fuzzy_values_dict['thallium_normal'] = 1
+        fuzzy_values_dict['thallium_medium'] = 0
+        fuzzy_values_dict['thallium_high'] = 0
+    elif thallium == 6:
+        fuzzy_values_dict['thallium_normal'] = 0
+        fuzzy_values_dict['thallium_medium'] = 1
+        fuzzy_values_dict['thallium_high'] = 0
+    else:
+        fuzzy_values_dict['thallium_normal'] = 0
+        fuzzy_values_dict['thallium_medium'] = 0
+        fuzzy_values_dict['thallium_high'] = 1
 
     return fuzzy_values_dict
