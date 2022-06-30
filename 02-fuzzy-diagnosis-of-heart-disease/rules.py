@@ -65,6 +65,17 @@ rules_list = [
     # Rule 28
     ('bloodSugar_veryhigh', 'nothing', 'output_sick2'),
 
+    # Rule 29
+    ('ecg_normal', 'nothing', 'output_healthy'),
+    # Rule 30
+    ('ecg_normal', 'nothing', 'output_sick1'),
+    # Rule 31
+    ('ecg_abnormal', 'nothing', 'output_sick2'),
+    # Rule 32
+    ('ecg_hypertrophy', 'nothing', 'output_sick3'),
+    # Rule 33
+    ('ecg_hypertrophy', 'nothing', 'output_sick4'),
+
     # Rule 34
     ('heartRate_low', 'nothing', 'output_healthy'),
     # Rule 35
@@ -75,6 +86,32 @@ rules_list = [
     ('heartRate_high', 'nothing', 'output_sick3'),
     # Rule 38
     ('heartRate_high', 'nothing', 'output_sick4'),
+
+
+    # Rule 39
+    ('exercise_suitable', 'nothing', 'output_sick2'),
+
+    # Rule 40
+    ('oldPeak_low', 'nothing', 'output_healthy'),
+    # Rule 41
+    ('oldPeak_low', 'nothing', 'output_sick1'),
+    # Rule 42
+    ('oldPeak_terrible', 'nothing', 'output_sick2'),
+    # Rule 43
+    ('oldPeak_terrible', 'nothing', 'output_sick3'),
+    # Rule 44
+    ('oldPeak_risk', 'nothing', 'output_sick4'),
+
+    # Rule 45
+    ('thallium_normal', 'nothing', 'output_healthy'),
+    # Rule 46
+    ('thallium_normal', 'nothing', 'output_sick1'),
+    # Rule 47
+    ('thallium_medium', 'nothing', 'output_sick2'),
+    # Rule 48
+    ('thallium_high', 'nothing', 'output_sick3'),
+    # Rule 49
+    ('thallium_high', 'nothing', 'output_sick4'),
 
     # Rule 50
     ('age_young', 'nothing', 'output_healthy'),
