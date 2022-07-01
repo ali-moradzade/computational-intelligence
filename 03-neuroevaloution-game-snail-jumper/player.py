@@ -1,6 +1,8 @@
 import random
 import statistics
 
+import numpy as np
+
 import pygame
 from variables import global_variables
 from nn import NeuralNetwork
@@ -78,7 +80,6 @@ class Player(pygame.sprite.Sprite):
             return []
 
         distances = []
-        distances_normalized_matrix = []
 
         priority = 0
         obstacles = self.normalize(obstacles)
@@ -93,7 +94,7 @@ class Player(pygame.sprite.Sprite):
             distances.append(distance_y)
 
         if len(distances) < self.nn.input_layer:
-            distances = distances + [[0.0] for i in range(self.nn.input_layer - len(distances))]
+            distances = distances + [[0.0] for _ in range(self.nn.input_layer - len(distances))]
         elif len(distances) > self.nn.input_layer:
             distances = distances[:self.nn.input_layer]
 
