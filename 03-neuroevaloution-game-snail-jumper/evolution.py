@@ -1,6 +1,44 @@
 import copy
+import random
+
+import numpy as np
 
 from player import Player
+
+
+# Roulette Wheel Selection
+def rw(players, num_players):
+    population_fitness = sum([player.fitness for player in players])
+    population_probabilities = [player.fitness / population_fitness for player in players]
+
+    return np.random.choice(players, size=num_players, p=population_probabilities)
+
+
+# Stochastic Universal Sampling
+def sus(players, num_players):
+    population_fitness = sum([player.fitness for player in players])
+    player_probability = [(player, player.fitness / population_fitness) for player in players]
+
+    # N1 = len(players)
+    N2 = num_players
+
+    ruler_size = 1 - 1 / N2
+    ruler = np.linspace(0, ruler_size, N2)
+
+    random_num = random.uniform(0, 1 / N2)
+    ruler = [probe + random_num for probe in ruler]
+
+    samples = []
+
+    start, end = 0, 0
+    for player, probability in player_probability:
+        end = start + probability
+
+        for probe in ruler:
+            if start < probe <= end:
+                samples.append(player)
+
+    return samples
 
 
 class Evolution:
