@@ -68,7 +68,6 @@ def save_fitness_results(min_fitness, average_fitness, max_fitness):
         df.to_csv(result_file, index=False)
     else:
         df = pd.read_csv(result_file)
-        print(df)
 
         # Adding our results to end of dataframe
         df.loc[len(df)] = [min_fitness, average_fitness, max_fitness]
@@ -77,15 +76,15 @@ def save_fitness_results(min_fitness, average_fitness, max_fitness):
         df.to_csv(result_file, index=False)
 
 
-mutation_threshold = 0.1
-mutation_value = 0.3
-crossover_threshold = 0.7
+mutation_threshold = 0.05
+mutation_value = 0.2
+crossover_threshold = 0.6
 
 
 class Evolution:
     def __init__(self):
         self.game_mode = "Neuroevolution"
-        self.selection_mode = 'rw'
+        self.selection_mode = 'top-k'
 
         if exists(result_file):
             os.remove(result_file)

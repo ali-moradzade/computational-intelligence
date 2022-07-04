@@ -44,4 +44,4 @@ class ProvideResult(object):
             else:
                 result = result + " & sick4"
 
-        return '{}: {}'.format(result, sickness)
+        return '{}: {}'.format(result, round(sickness, 2))

@@ -1,6 +1,3 @@
-import random
-import statistics
-
 import numpy as np
 
 import pygame
@@ -38,68 +35,26 @@ class Player(pygame.sprite.Sprite):
         if self.game_mode == "Neuroevolution":
             self.fitness = 0  # Initial fitness
 
-            layer_sizes = [7, 14, 2]
+            layer_sizes = [8, 20, 2]
             self.nn = NeuralNetwork(layer_sizes)
 
-    @staticmethod
-    def normalize(obstacles):
-
-        obstacle_x = []
-        obstacle_y = []
+    def generate_input(self, obstacles, player_x, player_y, screen_width, screen_height):
+        V = [player_x, player_y, screen_width, screen_height]
 
         for obstacle in obstacles:
-            obstacle_x.append(obstacle['x'])
-            obstacle_y.append(obstacle['y'])
+            V.append(obstacle['x'])
+            V.append(obstacle['y'])
 
-        avg_x = statistics.mean(obstacle_x)
-        max_x = max(obstacle_x)
-        min_x = min(obstacle_x)
+        if len(V) < self.nn.input_layer:
+            for i in range(self.nn.input_layer - len(V)):
+                V.append(player_x)
+                V.append(player_y)
 
-        avg_y = statistics.mean(obstacle_y)
-        max_y = max(obstacle_y)
-        min_y = min(obstacle_y)
+        V = V[:self.nn.input_layer]
+        V = np.array(V)
+        norm = np.linalg.norm(V)
 
-        normalized_obstacles = []
-        for obstacle in obstacles:
-            if max_x - min_x != 0:
-                new_x = (obstacle['x'] - avg_x) / (max_x - min_x)
-            else:
-                new_x = 0
-            if max_y - min_y != 0:
-                new_y = (obstacle['y'] - avg_y) / (max_y - min_y)
-            else:
-                new_y = 0
-
-            normalized_obstacles.append({'x': new_x, 'y': new_y})
-
-        return normalized_obstacles
-
-    def generate_input(self, screen_width, screen_height, obstacles, player_x, player_y):
-
-        if not obstacles:
-            return []
-
-        distances = []
-        priority = 0
-        obstacles = self.normalize(obstacles)
-        obstacles.reverse()
-
-        for obstacle in obstacles:
-            distance_x = [(player_x - obstacle['x'] + priority) / screen_width]
-            distance_y = [(player_y - obstacle['y'] + priority) / screen_height]
-
-            priority = priority + 50
-            distances.append(distance_x)
-            distances.append(distance_y)
-
-        if len(distances) < self.nn.input_layer:
-            distances = distances + [[0.0] for _ in range(self.nn.input_layer - len(distances))]
-        elif len(distances) > self.nn.input_layer:
-            distances = distances[:self.nn.input_layer]
-
-        distances = np.array(distances)
-
-        return distances
+        return V / norm
 
     def think(self, screen_width, screen_height, obstacles, player_x, player_y):
         """
@@ -114,19 +69,13 @@ class Player(pygame.sprite.Sprite):
         :param player_x: 'x' position of the player
         :param player_y: 'y' position of the player
         """
-        input_data = self.generate_input(screen_width, screen_height, obstacles, player_x, player_y)
-        if len(input_data) == 0:
-            if random.randint(0, 2):
-                self.change_gravity('left')
-            else:
-                self.change_gravity('right')
-        else:
-            gravity_vector = self.nn.forward(input_data)
+        input_vector = self.generate_input(obstacles, player_x, player_y, screen_width, screen_height)
+        output = self.nn.forward(input_vector)
 
-            if np.amax(gravity_vector[-1]) == gravity_vector[-1][0]:
-                self.change_gravity('left')
-            elif np.amax(gravity_vector[-1]) == gravity_vector[-1][1]:
-                self.change_gravity('right')
+        if output[0][0] > output[1][0]:
+            self.change_gravity('left')
+        else:
+            self.change_gravity('right')
 
     def change_gravity(self, new_gravity):
         """
