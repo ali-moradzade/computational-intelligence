@@ -1,5 +1,6 @@
 import copy
 import random
+import os
 
 import numpy as np
 import pandas as pd
@@ -13,7 +14,7 @@ def rw(players, num_players):
     population_fitness = sum([player.fitness for player in players])
     population_probabilities = [player.fitness / population_fitness for player in players]
 
-    return np.random.choice(players, size=num_players, p=population_probabilities)
+    return np.random.choice(players, size=num_players, p=population_probabilities).tolist()
 
 
 # Stochastic Universal Sampling
@@ -40,23 +41,21 @@ def sus(players, num_players):
             if start < probe <= end:
                 samples.append(player)
 
+        start += probability
+
     return samples
 
 
 # Q Tournament, in case of 2: binary tournament
-def q_tournament(players, num_players, q=2):
-    selected_players = []
-    for i in range(num_players):
-        random_players = np.random.choice(players, size=q)
-        selected_players.append(max(random_players, key=lambda player: player.fitness))
-
-    return selected_players
+def q_tournament(players, q=2):
+    random_player = np.random.choice(players, size=q)
+    return max(random_player, key=lambda player: player.fitness)
 
 
 result_file = 'generation_results.csv'
 
 
-def save_fitness_results(max_fitness, min_fitness, average_fitness):
+def save_fitness_results(min_fitness, average_fitness, max_fitness):
     if not exists(result_file):
         info = {
             'worst': [min_fitness],
@@ -66,49 +65,40 @@ def save_fitness_results(max_fitness, min_fitness, average_fitness):
         df = pd.DataFrame(info)
 
         # Saving the dataframe
-        df.to_csv(result_file)
+        df.to_csv(result_file, index=False)
     else:
         df = pd.read_csv(result_file)
+        print(df)
 
         # Adding our results to end of dataframe
         df.loc[len(df)] = [min_fitness, average_fitness, max_fitness]
 
         # Saving the dataframe
-        df.to_csv(result_file)
+        df.to_csv(result_file, index=False)
 
 
-# TODO: selected a proper values
-mutation_threshold = 0.2
-mutation_value = 5
-
-crossover_threshold = 0.2
+mutation_threshold = 0.1
+mutation_value = 0.3
+crossover_threshold = 0.7
 
 
 class Evolution:
     def __init__(self):
         self.game_mode = "Neuroevolution"
+        self.selection_mode = 'rw'
+
+        if exists(result_file):
+            os.remove(result_file)
 
     def mutation(self, player):
         player = self.clone_player(player)
         probability = np.random.uniform(0, 1)
 
-        w1 = player.nn.w1
-        w2 = player.nn.w2
-        b1 = player.nn.b1
-        b2 = player.nn.b2
-
         if probability >= mutation_threshold:
-            sign = random.choice([True, False])
-            if sign:
-                w1 += np.random.normal(0, mutation_value, w1)
-                w2 += np.random.normal(0, mutation_value, w2)
-                b1 += np.random.normal(0, mutation_value, b1)
-                b2 += np.random.normal(0, mutation_value, b2)
-            else:
-                w1 -= np.random.normal(0, mutation_value, w1)
-                w2 -= np.random.normal(0, mutation_value, w2)
-                b1 -= np.random.normal(0, mutation_value, b1)
-                b2 -= np.random.normal(0, mutation_value, b2)
+            player.nn.w1 += np.random.normal(0, mutation_value, player.nn.w1.shape)
+            player.nn.w2 += np.random.normal(0, mutation_value, player.nn.w2.shape)
+            player.nn.b1 += np.random.normal(0, mutation_value, player.nn.b1.shape)
+            player.nn.b2 += np.random.normal(0, mutation_value, player.nn.b2.shape)
 
         return player
 
@@ -125,8 +115,8 @@ class Evolution:
         for name, layer1, layer2 in [('w1', parent1.nn.w1, parent2.nn.w1), ('b1', parent1.nn.b1, parent2.nn.b1),
                                      ('w2', parent1.nn.w2, parent2.nn.w2), ('b2', parent1.nn.b2, parent2.nn.b2)]:
             crossover_position = layer1.shape[0] // 2
-            array1 = np.concatenate(layer1[:crossover_position], layer2[crossover_position:], axis=0)
-            array2 = np.concatenate(layer2[:crossover_position], layer1[crossover_position:], axis=0)
+            array1 = np.concatenate((layer1[:crossover_position], layer2[crossover_position:]), axis=0)
+            array2 = np.concatenate((layer2[:crossover_position], layer1[crossover_position:]), axis=0)
 
             if name == 'w1':
                 child1.nn.w1 = array1
@@ -146,11 +136,11 @@ class Evolution:
     # Reproduction step
     def reproduction(self, parent1, parent2):
         # Crossover
-        child1, child2 = crossover_threshold(parent1, parent2)
+        child1, child2 = self.crossover(parent1, parent2)
 
         # Mutation
-        self.mutation(child1)
-        self.mutation(child2)
+        child1 = self.mutation(child1)
+        child2 = self.mutation(child2)
 
         return child1, child2
 
@@ -162,12 +152,26 @@ class Evolution:
         :param players: list of players in the previous generation
         :param num_players: number of players that we return
         """
-        # TODO (Implement top-k algorithm here)
-        # TODO (Additional: Implement roulette wheel here)
-        # TODO (Additional: Implement SUS here)
 
-        # TODO (Additional: Learning curve)
-        return players[: num_players]
+        # Additional: Learning curve
+        min_fitness = min(player.fitness for player in players)
+        average_fitness = sum([player.fitness for player in players]) / len(players)
+        max_fitness = max(player.fitness for player in players)
+
+        save_fitness_results(min_fitness, average_fitness, max_fitness)
+
+        if self.selection_mode == 'top-k':
+            sorted_players = sorted(players, key=lambda player: player.fitness, reverse=True)
+            return sorted_players[:num_players]
+
+        elif self.selection_mode == 'sus':
+            return sus(players, num_players)
+
+        elif self.selection_mode == 'rw':
+            return rw(players, num_players)
+
+        else:
+            return players[:num_players]
 
     def generate_new_population(self, num_players, prev_players=None):
         """
@@ -181,8 +185,22 @@ class Evolution:
         if first_generation:
             return [Player(self.game_mode) for _ in range(num_players)]
         else:
-            # TODO ( Parent selection and child generation )
-            new_players = prev_players  # DELETE THIS AFTER YOUR IMPLEMENTATION
+            parents = []
+            new_players = prev_players
+
+            # Q Tournament
+            for i in range(num_players):
+                parents.append(q_tournament(prev_players))
+
+            for i in range(0, len(parents), 2):
+                parent1 = parents[i]
+                parent2 = parents[i + 1]
+                child1, child2 = self.reproduction(parent1, parent2)
+                new_players.append(child1)
+                new_players.append(child2)
+
+            new_players.sort(key=lambda x: x.fitness, reverse=True)
+            new_players = new_players[: num_players]
             return new_players
 
     def clone_player(self, player):

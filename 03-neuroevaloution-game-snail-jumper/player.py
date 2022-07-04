@@ -80,7 +80,6 @@ class Player(pygame.sprite.Sprite):
             return []
 
         distances = []
-
         priority = 0
         obstacles = self.normalize(obstacles)
         obstacles.reverse()
@@ -111,7 +110,7 @@ class Player(pygame.sprite.Sprite):
         :param obstacles: List of obstacles that are above the player. Each entry is a dictionary having 'x' and 'y' of
         the obstacle as the key. The list is sorted based on the obstacle's 'y' point on the screen. Hence, obstacles[0]
         is the first obstacle on the scene. It is also worthwhile noting that 'y' range is in [-100, 656], such that
-        -100 means it is off screen (Topmost point) and 656 means in parallel to our player's 'y' point.
+        -100 means it is off-screen (Topmost point) and 656 means in parallel to our player's 'y' point.
         :param player_x: 'x' position of the player
         :param player_y: 'y' position of the player
         """

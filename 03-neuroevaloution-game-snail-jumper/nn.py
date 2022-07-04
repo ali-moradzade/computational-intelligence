@@ -51,3 +51,6 @@ class NeuralNetwork:
         a2 = activation(self.w2 @ a1 + self.b2)
 
         return a2
+
+    def __str__(self):
+        return 'w1:\n{},\nw2:\n{},\nb1:\n{},\nb2:\n{}'.format(self.w1, self.w2, self.b1, self.b2)
