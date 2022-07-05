@@ -12,9 +12,9 @@ python3 app.py
 
 Then the app is running on: `http://127.0.0.1:8448/ `
 
-![Program](images/values.png)
+![Program](.assets/values.png)
 
-![Program Output](images/values_out.png)
+![Program Output](.assets/values_out.png)
 
 
 
@@ -23,37 +23,37 @@ Then the app is running on: `http://127.0.0.1:8448/ `
 - ### Age 
   Age of the patient in range of [0,100]
 
-  ![Age](images/age.png)
+  ![Age](.assets/age.png)
 
 - ### Blood Pressure
   
   Blood pressure in range of [0, 350]
   
-  ![Blood Pressure](images/bloodPressure.png)
+  ![Blood Pressure](.assets/bloodPressure.png)
 
 - ### Cholesterol
   
   Amount of cholesterol in range of [0, 600]
   
-  ![Cholesterol](images/cholesterol.png)
+  ![Cholesterol](.assets/cholesterol.png)
 
 - ### Blood Sugar
   
   Amount of blood sugar in range of [0, 200]
   
-  ![Blood Sugar](images/bloodPressure.png)
+  ![Blood Sugar](.assets/bloodPressure.png)
 
 - ### ECG
   
   A simple test that can be used to check your heart's rhythm and electrical activity. Its value is in range of [-0.5, 2.5]
   
-  ![ECG](images/ecg.png)
+  ![ECG](.assets/ecg.png)
 
 - ### Maximum Heart Rate
   
   Maximum heart rate of the patient in past 24 hours in range of [0, 600].
   
-  ![Heart Rate](images/heartRate.png)
+  ![Heart Rate](.assets/heartRate.png)
 
 - ### Exerciese
   
@@ -64,7 +64,7 @@ Then the app is running on: `http://127.0.0.1:8448/ `
   
   Degree of oldpeak in range of [0,10].
   
-  ![Old Peak](images/oldPeak.png)
+  ![Old Peak](.assets/oldPeak.png)
 
 - ### Thallium
   
@@ -80,7 +80,7 @@ Then the app is running on: `http://127.0.0.1:8448/ `
 
 We have one output parameter which is the health of the patient. It has 5 fuzzysets containing healty, sick1, sick2, sick3 and sick4.
 
-![Output](images/output.png)
+![Output](.assets/output.png)
 
 ## Rules
 
