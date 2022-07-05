@@ -1,13 +1,56 @@
 import numpy as np
 
 
-def activation(x):
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+def relu(x):
+    return np.maximum(0, x)
+
+
+def leaky_relu(x):
+    return np.maximum(0.01 * x, x)
+
+
+def tanh(x):
+    return np.tanh(x)
+
+
+def softmax(x):
+    e_x = np.exp(x)
+    return e_x / e_x.sum(axis=0)
+
+
+def linear(x):
+    return x
+
+
+def choose_activation(function):
+    if function == "sigmoid":
+        return sigmoid
+    elif function == "tanh":
+        return tanh
+    elif function == "relu":
+        return relu
+    elif function == "leaky-relu":
+        return leaky_relu
+    elif function == "softmax":
+        return softmax
+    elif function == "linear":
+        return linear
+    else:
+        raise ValueError('Activation function not found')
+
+
+def activation(x, function='sigmoid'):
     """
     The activation function of our neural network, e.g., Sigmoid, ReLU.
+    :param function: Kind of activation function we want
     :param x: Vector of a layer in our network.
     :return: Vector after applying activation function.
     """
-    return 1 / (1 + np.exp(-x))
+    return choose_activation(function)(x)
 
 
 class NeuralNetwork:
