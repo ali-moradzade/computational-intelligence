@@ -12,6 +12,10 @@ python3 app.py
 
 Then the app is running on: `http://127.0.0.1:8448/ `
 
+![Program](images/values.png)
+
+![Program Output](images/values_out.png)
+
 
 
 ## Input Parameters & Fuzzification
